@@ -147,7 +147,8 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
                                   : textDecrementAnimation.value,
                             ),
                       child: Text(
-                        _counter.toString(),
+                       // _counter.toString(),
+                        widget.initialCounter.toString(),
                         style: TextStyle(
                           fontSize: fontSize,
                           color: textColor,
