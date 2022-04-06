@@ -4,14 +4,14 @@ enum Direction { increment, decrement }
 enum Style { vertical, horizontal }
 
 class Stepo extends StatefulWidget {
-  final double width, fontSize, iconSize;
-  final Function(int) onIncrementClicked, onDecrementClicked;
-  final Color textColor, iconColor, backgroundColor;
-  final Duration animationDuration;
-  final int initialCounter, upperBound, lowerBound;
-  final Style style;
+  final double? width, fontSize, iconSize;
+  final Function(int)? onIncrementClicked, onDecrementClicked;
+  final Color? textColor, iconColor, backgroundColor;
+  final Duration? animationDuration;
+  final int? initialCounter, upperBound, lowerBound;
+  final Style? style;
   Stepo({
-    @required Key key,
+    required Key key,
     this.initialCounter,
     this.onIncrementClicked,
     this.onDecrementClicked,
@@ -32,25 +32,25 @@ class Stepo extends StatefulWidget {
 }
 
 class _StepoState extends State<Stepo> with TickerProviderStateMixin {
-  int _counter, upperBound, lowerBound;
+  late int _counter, upperBound, lowerBound;
   bool _isDecrementIconClicked = false;
   bool _isIncrementIconClicked = false;
-  double rootWidth, rootHeight, fontSize, iconSize, cornerRadius;
+  double? rootWidth, rootHeight, fontSize, iconSize, cornerRadius;
   double textOpacity = 1;
-  double textAnimationEndValue;
-  Duration textAnimationDuration;
-  Duration iconAnimationDuration;
+  double? textAnimationEndValue;
+  Duration? textAnimationDuration;
+  Duration? iconAnimationDuration;
   Duration scaleDuration = Duration(milliseconds: 100);
-  Function onIncrementClicked, onDecrementClicked;
-  Color textColor, iconColor, backgroundColor;
-  Style style;
+  late Function onIncrementClicked, onDecrementClicked;
+  Color? textColor, iconColor, backgroundColor;
+  Style? style;
 
-  Animation<double> textIncrementAnimation,
+  late Animation<double> textIncrementAnimation,
       textDecrementAnimation,
       incrementIconAnimation,
       decrementIconAnimation,
       scaleAnimation;
-  AnimationController textIncrementAnimationController,
+  AnimationController? textIncrementAnimationController,
       textDecrementAnimationController,
       incrementIconAnimationController,
       decrementIconAnimationController,
@@ -91,7 +91,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
             decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.all(
-                Radius.circular(cornerRadius),
+                Radius.circular(cornerRadius!),
               ),
             ),
             child: Material(
@@ -124,7 +124,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
                               : Icons.keyboard_arrow_up,
                           color: _isDecrementIconClicked
                               ? iconColor
-                              : iconColor.withOpacity(0.5),
+                              : iconColor!.withOpacity(0.5),
                           size: iconSize,
                         ),
                       ),
@@ -176,7 +176,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
                               : Icons.keyboard_arrow_down,
                           color: _isIncrementIconClicked
                               ? iconColor
-                              : iconColor.withOpacity(0.5),
+                              : iconColor!.withOpacity(0.5),
                           size: iconSize,
                         ),
                       ),
@@ -199,25 +199,25 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
     textColor = widget.textColor ?? Color(0xffEC645B);
     iconColor = widget.iconColor ?? Color(0xffEC645B);
     textAnimationEndValue =
-        widget.width == null ? 100.0 : (widget.width * 0.75);
+        widget.width == null ? 100.0 : (widget.width! * 0.75);
     _counter = widget.initialCounter ?? 0;
     rootWidth = widget.width ?? ((style == Style.horizontal) ? 160 : 80);
     if (style == Style.vertical) {
-      rootHeight = rootWidth * 2;
+      rootHeight = rootWidth! * 2;
     } else {
-      rootHeight = rootWidth / 2;
+      rootHeight = rootWidth! / 2;
     }
     cornerRadius =
-        style == Style.horizontal ? (rootWidth / 4) : (rootHeight / 4);
+        style == Style.horizontal ? (rootWidth! / 4) : (rootHeight! / 4);
     textAnimationDuration =
         widget.animationDuration ?? Duration(milliseconds: 200);
     iconAnimationDuration = Duration(
-      milliseconds: (textAnimationDuration.inMilliseconds / 2).floor(),
+      milliseconds: (textAnimationDuration!.inMilliseconds / 2).floor(),
     );
     iconSize =
-        style == Style.horizontal ? rootWidth * 0.25 : (rootHeight * 0.25);
+        style == Style.horizontal ? rootWidth! * 0.25 : (rootHeight! * 0.25);
 
-    fontSize = style == Style.horizontal ? (rootWidth / 5) : (rootHeight / 5);
+    fontSize = style == Style.horizontal ? (rootWidth! / 5) : (rootHeight! / 5);
     onIncrementClicked = widget.onIncrementClicked ?? (val) {};
     onDecrementClicked = widget.onDecrementClicked ?? (val) {};
   }
@@ -228,10 +228,10 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
       duration: scaleDuration,
     );
     scaleAnimation =
-        Tween<double>(begin: 1.0, end: 0.9).animate(scaleAnimationController)
+        Tween<double>(begin: 1.0, end: 0.9).animate(scaleAnimationController!)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              scaleAnimationController.reverse();
+              scaleAnimationController!.reverse();
             }
           })
           ..addListener(() {
@@ -248,7 +248,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
     textIncrementAnimation = getAnimation(
       beginValue: 0.0,
       endValue: textAnimationEndValue,
-      animationController: textIncrementAnimationController,
+      animationController: textIncrementAnimationController!,
       direction: Direction.increment,
     );
   }
@@ -262,7 +262,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
     textDecrementAnimation = getAnimation(
       beginValue: 0,
       endValue: textAnimationEndValue,
-      animationController: textDecrementAnimationController,
+      animationController: textDecrementAnimationController!,
       direction: Direction.decrement,
     );
   }
@@ -275,8 +275,8 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
     incrementIconAnimation = getAnimation(
       beginValue: 0.0,
-      endValue: textAnimationEndValue / 2,
-      animationController: incrementIconAnimationController,
+      endValue: textAnimationEndValue! / 2,
+      animationController: incrementIconAnimationController!,
       direction: Direction.increment,
     );
   }
@@ -289,14 +289,14 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
     decrementIconAnimation = getAnimation(
       beginValue: 0.0,
-      endValue: textAnimationEndValue / 2,
-      animationController: decrementIconAnimationController,
+      endValue: textAnimationEndValue! / 2,
+      animationController: decrementIconAnimationController!,
       direction: Direction.decrement,
     );
   }
 
   AnimationController getAnimationController(
-      {@required TickerProvider vsync, @required Duration duration}) {
+      {required TickerProvider vsync, required Duration? duration}) {
     return AnimationController(
       vsync: vsync,
       duration: duration,
@@ -304,11 +304,11 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
   }
 
   Animation<double> getAnimation(
-      {@required double beginValue,
-      @required double endValue,
-      @required AnimationController animationController,
-      @required Direction direction}) {
-    endValue = direction == Direction.increment ? endValue : (-endValue);
+      {required double beginValue,
+      required double? endValue,
+      required AnimationController animationController,
+      required Direction direction}) {
+    endValue = direction == Direction.increment ? endValue : (-endValue!);
     return Tween<double>(begin: beginValue, end: endValue)
         .animate(animationController)
           ..addListener(() {
@@ -326,22 +326,22 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
   void handleIncrementAnimation() async {
     _isIncrementIconClicked = true;
-    scaleAnimationController.forward();
-    incrementIconAnimationController.forward();
-    await Future.delayed(iconAnimationDuration);
-    textIncrementAnimationController.forward();
-    await Future.delayed(textAnimationDuration);
+    scaleAnimationController!.forward();
+    incrementIconAnimationController!.forward();
+    await Future.delayed(iconAnimationDuration!);
+    textIncrementAnimationController!.forward();
+    await Future.delayed(textAnimationDuration!);
 
     incrementCounter();
     onIncrementClicked(_counter);
 
-    textIncrementAnimationController.reverse();
-    await Future.delayed(iconAnimationDuration);
+    textIncrementAnimationController!.reverse();
+    await Future.delayed(iconAnimationDuration!);
      if(mounted) {
-      incrementIconAnimationController.reverse();
+      incrementIconAnimationController!.reverse();
     }
 
-    await Future.delayed(iconAnimationDuration);
+    await Future.delayed(iconAnimationDuration!);
     if(mounted) {
       this.setState(() {
         _isIncrementIconClicked = false;
@@ -351,22 +351,22 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
   void handleDecrementAnimation() async {
     _isDecrementIconClicked = true;
-    scaleAnimationController.forward();
-    decrementIconAnimationController.forward();
-    await Future.delayed(iconAnimationDuration);
-    textDecrementAnimationController.forward();
-    await Future.delayed(textAnimationDuration);
+    scaleAnimationController!.forward();
+    decrementIconAnimationController!.forward();
+    await Future.delayed(iconAnimationDuration!);
+    textDecrementAnimationController!.forward();
+    await Future.delayed(textAnimationDuration!);
 
     decrementCounter();
     onDecrementClicked(_counter);
 
-    textDecrementAnimationController.reverse();
-    await Future.delayed(iconAnimationDuration);
+    textDecrementAnimationController!.reverse();
+    await Future.delayed(iconAnimationDuration!);
     if(mounted){
-      decrementIconAnimationController.reverse();
+      decrementIconAnimationController!.reverse();
     }
 
-    await Future.delayed(iconAnimationDuration);
+    await Future.delayed(iconAnimationDuration!);
     if(mounted) {
       this.setState(() {
         _isDecrementIconClicked = false;
@@ -376,7 +376,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
   void incrementCounter() {
     setState(() {
-      if (_counter < upperBound) {
+      if (_counter! < upperBound!) {
         _counter++;
       }
     });
@@ -384,7 +384,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
   void decrementCounter() {
     setState(() {
-      if (_counter > lowerBound) {
+      if (_counter! > lowerBound!) {
         _counter--;
       }
     });
