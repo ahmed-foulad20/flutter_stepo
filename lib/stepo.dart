@@ -376,7 +376,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
   void incrementCounter() {
     setState(() {
-      if (_counter! < upperBound!) {
+      if (_counter < upperBound) {
         _counter++;
       }
     });
@@ -384,7 +384,7 @@ class _StepoState extends State<Stepo> with TickerProviderStateMixin {
 
   void decrementCounter() {
     setState(() {
-      if (_counter! > lowerBound!) {
+      if (_counter > lowerBound) {
         _counter--;
       }
     });
